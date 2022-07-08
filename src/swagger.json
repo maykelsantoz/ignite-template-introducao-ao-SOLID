@@ -1,0 +1,262 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Atlas",
+    "description": "This is a documentation for the Atlas API.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Create a new user.",
+        "requestBody": {
+          "description": "Campos obrigatórios para criação de um usuário.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "name": "Maykel Santos",
+                  "email": "maykelsantoz@rocketseat.com.br"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Operação realizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Users"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email já está sendo utilizado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "error": "This email is already in use!"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retorna todos os usuário.",
+        "description": "Somente usuário <b>admin</b> pode acessar.",
+        "tags": ["users"],
+        "security": [{ "user_id": [] }],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "header",
+            "description": "Profile do usuário pelo ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação realizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/listAllUsers"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Usuário sem permissão ou Usuário não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "error": "You need to be an administrator to list all users!"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "summary": "Retorna um usuário específico.",
+        "tags": ["users"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação realizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Users"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "error": "User not found."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/admin": {
+      "patch": {
+        "summary": "Torna admin um usuário.",
+        "tags": ["users"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Users"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "error": "User not found."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Users": {
+        "type": "object",
+        "example": {
+          "admin": false,
+          "id": "1c82f33a-85d0-46e5-85bf-c310c9240db2",
+          "name": "Maykel Santos",
+          "email": "maykelsantoz4@rocketseat.com.br",
+          "created_at": "2022-07-04T00:37:33.231Z",
+          "updated_at": "2022-07-04T00:38:10.175Z"
+        },
+        "properties": {
+          "admin": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        }
+      },
+      "listAllUsers": {
+        "type": "object",
+        "example": [
+          {
+            "admin": true,
+            "id": "1c82f33a-85d0-46e5-85bf-c310c9240db2",
+            "name": "Maykel Santos",
+            "email": "maykelsantoz4@rocketseat.com.br",
+            "created_at": "2022-07-04T00:37:33.231Z",
+            "updated_at": "2022-07-04T00:38:10.175Z"
+          },
+          {
+            "admin": false,
+            "id": "1c82f33a-85d0-46e5-85bf-c310c9240db2",
+            "name": "Maykel Santos",
+            "email": "maykelsantoz4@rocketseat.com.br",
+            "created_at": "2022-07-04T00:37:33.231Z",
+            "updated_at": "2022-07-04T00:38:10.175Z"
+          }
+        ],
+        "properties": {
+          "admin": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        }
+      },
+      "userAlreadyExists": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "description": "number of items to skip"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "user_id": {
+        "type": "apiKey",
+        "name": "user_id",
+        "in": "header"
+      }
+    }
+  }
+}

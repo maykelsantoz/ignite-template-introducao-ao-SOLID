@@ -4,7 +4,7 @@ import { v4 as uuidV4 } from "uuid";
 import { ShowUserProfileUseCase } from "./ShowUserProfileUseCase";
 
 class ShowUserProfileController {
-  constructor(private showUserProfileUseCase: ShowUserProfileUseCase) { }
+  constructor(private showUserProfileUseCase: ShowUserProfileUseCase) {}
 
   handle(request: Request, response: Response): Response {
     const { user_id } = request.params;
